@@ -94,3 +94,36 @@
 
 # -------------------- 11 ------------------------ #
 
+# all: f1.o f2.o
+
+# f1.o f2.o:
+# 	echo $@
+# # Equivalent to:
+# # f1.o:
+# #	 echo f1.o
+# # f2.o:
+# #	 echo f2.o
+
+# -------------------- 12 ------------------------ #
+
+# print: $(wildcard *.c)
+# 	ls -la  $?
+
+# -------------------- 13 ------------------------ #
+
+thing_wrong := *.o # Don't do this! '*' will not get expanded
+thing_right := $(wildcard *.o)
+
+all: one two three four
+
+# Fails, because $(thing_wrong) is the string "*.o"
+one: $(thing_wrong)
+
+# Stays as *.o if there are no files that match this pattern :(
+two: *.o 
+
+# Works as you would expect! In this case, it does nothing.
+three: $(thing_right)
+
+# Same as rule three
+four: $(wildcard *.o)
